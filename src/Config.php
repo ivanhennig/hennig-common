@@ -15,7 +15,19 @@ class Config
 
     static public function get($k, $def = '')
     {
-        $return = json_decode(file_get_contents(BASE_DIR . "config.json"), true);
+        static $return = null;
+        if ($return === null) {
+            if (!defined('BASE_DIR')) {
+                throw new \Exception("Please set a BASE_DIR constant.");    
+            }
+            
+            if (!file_exists(BASE_DIR . 'config.json')) {
+                return $def;
+            }
+            
+            $return = json_decode(file_get_contents(BASE_DIR . 'config.json'), true);        
+        }
+
         return $return[$k] ?? $def;
     }
 }
