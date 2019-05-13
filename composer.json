@@ -8,8 +8,10 @@
             "email": "ivan@hennig.net.br"
         }
     ],
-    "psr-4": { 
-        "Hennig\\Common\\": "src/" 
-    }
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
     "require": {}
 }
