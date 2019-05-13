@@ -1,0 +1,15 @@
+{
+    "name": "hennig/common",
+    "description": "Common Classes for Projects",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Ivan Hennig",
+            "email": "ivan@hennig.net.br"
+        }
+    ],
+    "psr-4": { 
+        "Hennig\\Common\\": "src/" 
+    }
+    "require": {}
+}
