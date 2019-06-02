@@ -1,17 +1,20 @@
 {
-    "name": "hennig/common",
-    "description": "Common Classes for Projects",
-    "type": "library",
-    "authors": [
-        {
-            "name": "Ivan Hennig",
-            "email": "ivan@hennig.net.br"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Hennig\\Common\\": "src/"
-        }
-    },
-    "require": {}
+  "name": "hennig/common",
+  "description": "Common Classes for Projects",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Ivan Hennig",
+      "email": "ivan@hennig.net.br"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Hennig\\Common\\": "src/"
+    }
+  },
+  "require": {
+    "ext-openssl": "*",
+    "ext-json": "*"
+  }
 }
