@@ -5,6 +5,24 @@ namespace Hennig\Common;
 class Config
 {
     /**
+     * Must be called first to init the project
+     *
+     * @param array $params
+     * @throws \Exception
+     */
+    static public function init($params = [])
+    {
+        global $argv;
+        date_default_timezone_set($params['timezone'] ?? 'America/Sao_Paulo');
+        define('BASE_DIR', $params['base_dir'] ?? realpath(__DIR__ . '../../') . '/');
+        if (php_sapi_name() === 'cli') {
+            define('DEBUG', !empty($argv[1]) && $argv[1] === 'debug');
+        } else {
+            define('DEBUG', !!filter_input(INPUT_GET, 'debug'));
+        }
+    }
+
+    /**
      * Get a key from config file or throws an error when not found
      *
      * @param string $key
@@ -19,6 +37,16 @@ class Config
         }
 
         return $value;
+    }
+
+    /**
+     * @param string $key
+     * @param string $default
+     * @return mixed|string
+     */
+    static public function env($key, $default = '')
+    {
+        return constant($key) ?? $default;
     }
 
     /**
