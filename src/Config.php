@@ -14,7 +14,7 @@ class Config
     {
         global $argv;
         date_default_timezone_set($params['timezone'] ?? 'America/Sao_Paulo');
-        define('BASE_DIR', $params['base_dir'] ?? realpath(__DIR__ . '../../') . '/');
+        define('BASE_DIR', $params['base_dir'] ?? realpath(__DIR__ . '/../../../../') . '/');
         if (php_sapi_name() === 'cli') {
             define('DEBUG', !empty($argv[1]) && $argv[1] === 'debug');
         } else {
