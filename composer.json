@@ -10,7 +10,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Hennig\\Common\\": "src/"
+      "Hennig\\Common\\": "src/",
+      "Hennig\\Builder\\": "src/builder"
     }
   },
   "require": {
