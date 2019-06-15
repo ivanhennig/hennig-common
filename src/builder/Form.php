@@ -4,6 +4,8 @@ namespace Hennig\Builder;
 
 class Form extends Card implements Jsonable
 {
+    use HasEvents;
+
     public $type = "form";
     /**
      *
@@ -30,6 +32,17 @@ class Form extends Card implements Jsonable
      */
     protected $_audit = true;
 
+    /** @var array Param for posting data via rpc */
+    public $rpc = [];
+
+    public function __construct()
+    {
+        $caller = last(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2));
+        $this->rpc = [
+            class_basename($caller['class']),
+            'save'
+        ];
+    }
 
     /**
      * @param bool $audit
