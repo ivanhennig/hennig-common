@@ -46,7 +46,7 @@ class Config
      */
     static public function env($key, $default = '')
     {
-        return constant($key) ?? $default;
+        return defined($key) ? constant($key) : $default;
     }
 
     /**
