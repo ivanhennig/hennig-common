@@ -16,6 +16,11 @@
   },
   "require": {
     "ext-openssl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "illuminate/database": "^5.8",
+    "ramsey/uuid": "^3.8",
+    "illuminate/events": "^5.8",
+    "illuminate/validation": "^5.8",
+    "moontoast/math": "*"
   }
 }
