@@ -5,6 +5,8 @@ namespace Hennig\Builder;
 
 class Control
 {
+    use HasEvents;
+
     public $id = "";
     /**
      * Name, match db field name

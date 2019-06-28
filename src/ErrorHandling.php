@@ -2,6 +2,8 @@
 
 namespace Hennig\Common;
 
+use Illuminate\Validation\ValidationException;
+
 class ErrorHandling
 {
     /**
@@ -51,6 +53,11 @@ class ErrorHandling
             $msg['message'] = html_entity_decode($exception->getMessage());
             if ($exception->getCode() > 0) {
                 $msg['code'] = $exception->getCode();
+            }
+
+            if ($exception instanceof ValidationException) {
+                /** @var ValidationException $exception */
+                $msg['data'] = $exception->errors();
             }
 
             if ($debug) {

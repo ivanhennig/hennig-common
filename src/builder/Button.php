@@ -10,6 +10,7 @@ class Button extends Control
     const BT_INFO = "info";
     const BT_WARNING = "warning";
     const BT_DANGER = "danger";
+    const BT_SAVE = "save";
 
     public $type = "button";
     public $subtype = Button::BT_PRIMARY;
@@ -37,21 +38,6 @@ class Button extends Control
     public function setOutline($outline)
     {
         $this->outline = $outline;
-        return $this;
-    }
-
-    /**
-     * Set event handlers
-     * Ex.:
-     *  ->on('click','js_function_name');
-     *
-     * @param $method
-     * @param $value
-     * @return $this
-     */
-    public function on($method, $value)
-    {
-        $this->on[$method] = $value;
         return $this;
     }
 }
