@@ -17,6 +17,7 @@
   "require": {
     "ext-openssl": "*",
     "ext-json": "*",
+    "ext-curl": "*",
     "illuminate/database": "^5.8",
     "ramsey/uuid": "^3.8",
     "illuminate/events": "^5.8",
