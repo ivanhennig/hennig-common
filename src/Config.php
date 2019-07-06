@@ -72,6 +72,6 @@ class Config
             $return = json_decode(file_get_contents(BASE_DIR . 'config.json'), true);        
         }
 
-        return $return[$key] ?: '' ?? $default;
+        return $return[$key] ?? '' ?: $default;
     }
 }
