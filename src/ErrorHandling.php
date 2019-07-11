@@ -2,10 +2,11 @@
 
 namespace Hennig\Common;
 
-use Illuminate\Validation\ValidationException;
-
 class ErrorHandling
 {
+    const ARRAY = 1;
+    const OUTPUT = 2;
+
     /**
      * Init error handling
      *
@@ -26,49 +27,67 @@ class ErrorHandling
         }, $error_handler_level);
 
         set_exception_handler(function ($exception) {
-            $debug = Config::env('DEBUG', false);
-            /** @var \Exception $exception */
-            if (php_sapi_name() === 'cli') {
-                $msg = "{$exception->getMessage()}";
-                if ($exception->getCode()) {
-                    $msg .= " ({$exception->getCode()})";
-                }
+            static::output($exception, static::OUTPUT);
+        });
+    }
 
-                if ($debug) {
-                    $msg .= ", {$exception->getFile()} ({$exception->getLine()})";
-                    echo "Exception: $msg" . PHP_EOL;
+    /**
+     * @param \Exception $exception
+     * @param int $returnType
+     * @return array|string|void
+     */
+    static public function output($exception, $returnType = self::OUTPUT)
+    {
+        $debug = Config::env('DEBUG', false) || Config::get('debug', false);
 
-                    foreach (static::trace($exception) as $trace) {
-                        echo $trace . PHP_EOL;
-                    }
-
-                    return;
-                }
-
-                echo "Exception: $msg" . PHP_EOL;
-                return;
-            }
-
-            $msg = array();
-            $msg['message'] = html_entity_decode($exception->getMessage());
-            if ($exception->getCode() > 0) {
-                $msg['code'] = $exception->getCode();
-            }
-
-            if ($exception instanceof ValidationException) {
-                /** @var ValidationException $exception */
-                $msg['data'] = $exception->errors();
+        // Console
+        if (php_sapi_name() === 'cli') {
+            $msg = "{$exception->getMessage()}";
+            if ($exception->getCode()) {
+                $msg .= " ({$exception->getCode()})";
             }
 
             if ($debug) {
-                $msg['trace'] = iterator_to_array(static::trace($exception));
+                $msg .= ", {$exception->getFile()} ({$exception->getLine()})";
+                echo "Exception: $msg" . PHP_EOL;
+
+                foreach (static::trace($exception) as $trace) {
+                    echo $trace . PHP_EOL;
+                }
+
+                return;
             }
 
-            echo json_encode([
-                'result' => null,
-                'error' => $msg
-            ]);
-        });
+            echo "Exception: $msg" . PHP_EOL;
+            return;
+        }
+
+        // Rpc
+        $msg = [];
+        $msg['message'] = html_entity_decode($exception->getMessage());
+        if ($exception->getCode() > 0) {
+            $msg['code'] = $exception->getCode();
+        }
+
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            /** @var \Illuminate\Validation\ValidationException $exception */
+            $msg['data'] = $exception->errors();
+        }
+
+        if ($debug) {
+            $msg['trace'] = iterator_to_array(static::trace($exception));
+        }
+
+        $msg = [
+            'result' => null,
+            'error' => $msg
+        ];
+
+        if ($returnType === static::ARRAY) {
+            return $msg;
+        }
+
+        echo \json_encode($msg);
     }
 
     /**

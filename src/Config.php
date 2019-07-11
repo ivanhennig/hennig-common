@@ -55,15 +55,14 @@ class Config
      * @param string $key
      * @param string $default
      * @return mixed
-     * @throws \Exception
      */
     static public function get($key, $default = '')
     {
         static $return = null;
         if ($return === null) {
-            if (!defined('BASE_DIR')) {
-                throw new EWrongSetting('BASE_DIR');
-            }
+//            if (!defined('BASE_DIR')) {
+//                throw new EWrongSetting('BASE_DIR');
+//            }
             
             if (!\file_exists(BASE_DIR . 'config.json')) {
                 return $default;

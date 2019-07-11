@@ -33,7 +33,7 @@ class Common
     /**
      * Send a notification to Slack
      *
-     * @param $message
+     * @param string|\Exception $message
      * @param $channel
      * @return void
      * @throws \Exception
@@ -43,6 +43,10 @@ class Common
         $channels = Config::get('slack_channels', []);
         if (empty($channels) || empty($channels[$channel])) {
             return;
+        }
+
+        if ($message instanceof \Exception) {
+            $message = $message->getMessage() . PHP_EOL . iterator_to_array(ErrorHandling::trace($message));
         }
 
         // Create a constant to store your Slack URL
