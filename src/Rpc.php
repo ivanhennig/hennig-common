@@ -22,7 +22,7 @@ class Rpc
         header("Access-Control-Allow-Headers: Content-Type");
         header("Cache-Control: no-cache, must-revalidate");
         header("Expires: Mon, 10 Aug 1979 05:00:00 GMT");
-        header("Content-Type: text/javascript; charset=utf-8", true);
+        header("Content-Type: application/json; charset=utf-8", true);
         ob_implicit_flush(true);
         if (Config::get('app_gzip') && strpos($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') !== false) {
             header("Content-Encoding: gzip");
@@ -40,9 +40,8 @@ class Rpc
     {
         // Need to close before any output
         if (!headers_sent()) session_write_close();
-        echo \json_encode(['method' => $name, 'params' => $params]);
+        echo \json_encode(['method' => $name, 'params' => $params]) . PHP_EOL;
         ob_flush();
-        usleep(100000);
     }
 
     /**
