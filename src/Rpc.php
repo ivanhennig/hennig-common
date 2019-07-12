@@ -112,8 +112,7 @@ class Rpc
         }
 
         if (!headers_sent()) session_write_close();
-        echo \json_encode($response);
-        ob_flush();
+        echo \json_encode($response) . PHP_EOL;
     }
 
     /**
