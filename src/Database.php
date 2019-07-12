@@ -4,10 +4,15 @@ namespace Hennig\Common;
 
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Connection;
 use Illuminate\Events\Dispatcher;
 
 class Database
 {
+    /**
+     * @var Connection
+     */
+    static $connection = null;
     static public function init()
     {
         $capsule = new Capsule;
@@ -35,5 +40,24 @@ class Database
         $capsule->setAsGlobal();
         // Setup the Eloquent ORM
         $capsule->bootEloquent();
+
+        self::$connection = $capsule->getConnection();
+    }
+
+    /**
+     * @return Connection
+     */
+    static public function connection()
+    {
+        return self::$connection;
+    }
+
+    /**
+     * @param $v
+     * @return string
+     */
+    static public function quot($v)
+    {
+        return self::$connection->getPdo()->quote($v);
     }
 }
