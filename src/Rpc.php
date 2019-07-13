@@ -3,6 +3,7 @@
 namespace Hennig\Common;
 
 use Hennig\Builder\Jsonable;
+use Illuminate\Support\Str;
 
 class Rpc
 {
@@ -39,8 +40,16 @@ class Rpc
     static public function method($name, $params = [])
     {
         // Need to close before any output
+        $json = \json_encode(['method' => $name, 'params' => $params]);
+        if (1) {//@todo
+            $file = Config::env('BASE_DIR') . '/tmp/' . $_COOKIE['PHPSESSID'] . '/' . Str::orderedUuid();
+            @mkdir(dirname($file), 0777, true);
+            file_put_contents($file, $json);
+            return;
+        }
+
         if (!headers_sent()) session_write_close();
-        echo \json_encode(['method' => $name, 'params' => $params]) . PHP_EOL;
+        echo "$json\n";
         ob_flush();
     }
 
