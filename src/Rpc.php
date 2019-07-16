@@ -24,7 +24,10 @@ class Rpc
         header("Cache-Control: no-cache, must-revalidate");
         header("Expires: Mon, 10 Aug 1979 05:00:00 GMT");
         header("Content-Type: application/json; charset=utf-8", true);
-        ob_implicit_flush(true);
+        if (Config::get('enable_streams')) {
+            ob_implicit_flush(true);
+        }
+
         if (Config::get('app_gzip') && strpos($_SERVER['HTTP_ACCEPT_ENCODING'] ?? '', 'gzip') !== false) {
             header("Content-Encoding: gzip");
             ob_start("ob_gzhandler");
@@ -39,18 +42,20 @@ class Rpc
      */
     static public function method($name, $params = [])
     {
-        // Need to close before any output
         $json = \json_encode(['method' => $name, 'params' => $params]);
-        if (1) {//@todo
-            $file = Config::env('BASE_DIR') . '/tmp/' . $_COOKIE['PHPSESSID'] . '/' . Str::orderedUuid();
-            @mkdir(dirname($file), 0777, true);
-            file_put_contents($file, $json);
+
+        if (Config::get('enable_streams')) {
+            // Need to close before any output
+            if (!headers_sent()) session_write_close();
+            echo "$json\n";
+            ob_flush();
             return;
         }
 
-        if (!headers_sent()) session_write_close();
-        echo "$json\n";
-        ob_flush();
+        // EMulating streams with files
+        $file = Config::env('BASE_DIR') . '/tmp/' . $_COOKIE['PHPSESSID'] . '/' . Str::orderedUuid();
+        @mkdir(dirname($file), 0777, true);
+        @file_put_contents($file, $json);
     }
 
     /**
@@ -126,22 +131,17 @@ class Rpc
 
     /**
      * @param $object
-     * @throws \Exception
+     * @param int $level
+     * @throws ESimple
      */
-    static public function checkPermission($object)
+    static public function checkPermission($object, $level = 1)
     {
         $uses = class_uses($object);
         if (in_array(\Hennig\Common\AllowGuest::class, $uses)) {
             return;
         }
 
-        if (static::$authClass::check()) {
-            Session::set('user_id', static::$authClass::id());
-        } else {
-            Session::set('user_id', '');
-        }
-
-        if (!Session::get('user_id')) {
+        if (!static::$authClass::check()) {
             throw new ESimple('User not logged.');
         }
 
@@ -149,8 +149,13 @@ class Rpc
             return;
         }
 
-        if (!Session::get('user_level')) {
+        $user_level = static::$authClass::get('user_level');
+        if (!$user_level) {
             throw new ESimple('Privilegies required.');
+        }
+
+        if ($user_level < $level) {
+            throw new ESimple('Higher privilegies required.');
         }
     }
 }

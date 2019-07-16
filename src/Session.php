@@ -26,6 +26,7 @@ class Session
 
             public function destroy($session_id)
             {
+                if (headers_sent()) return;
                 setcookie($session_id, '', time() - 3600);
                 unset($_COOKIE[$session_id]);
             }
@@ -52,6 +53,7 @@ class Session
 
             public function write($session_id, $session_data)
             {
+                if (headers_sent()) return true;
                 $ciphertext = \openssl_encrypt($session_data, 'aes-128-cbc', $this->key, $options = OPENSSL_RAW_DATA, $this->iv);
                 setcookie($session_id, \base64_encode($ciphertext));
                 return true;
@@ -70,7 +72,7 @@ class Session
      */
     static public function get($key, $default = '')
     {
-        return \json_decode($_SESSION[$key] ?? '' ?: $default);
+        return \json_decode($_SESSION[$key] ?? '' ?: \json_encode($default));
     }
 
     /**
