@@ -23,6 +23,6 @@
     "ramsey/uuid": "^3.8",
     "illuminate/events": "^5.8",
     "illuminate/validation": "^5.8",
-    "moontoast/math": "*",
+    "moontoast/math": "*"
   }
 }
