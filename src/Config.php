@@ -12,6 +12,8 @@ class Config
      */
     static public function init($params = [])
     {
+        if (defined('BASE_DIR')) return; //Avoid re-init
+
         global $argv;
         date_default_timezone_set($params['timezone'] ?? 'America/Sao_Paulo');
         define('BASE_DIR', $params['base_dir'] ?? realpath(__DIR__ . '/../../../../') . '/');
@@ -20,6 +22,23 @@ class Config
         } else {
             define('DEBUG', !!filter_input(INPUT_GET, 'debug'));
         }
+
+        self::initLang('pt_BR');
+    }
+
+    /**
+     * @param string $lang
+     */
+    static protected function initLang($lang)
+    {
+        putenv("LANGUAGE=$lang");
+        //Default locale
+        setlocale(LC_MESSAGES, "C.UTF-8");
+        //.po .mo name
+        $domain = 'messages';
+        bindtextdomain($domain, BASE_DIR . 'lang');
+        bind_textdomain_codeset($domain, "UTF-8");
+        textdomain($domain);
     }
 
     /**
