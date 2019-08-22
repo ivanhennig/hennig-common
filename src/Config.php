@@ -2,13 +2,20 @@
 
 namespace Hennig\Common;
 
+use Exception;
+
+/**
+ * Class Config
+ *
+ * @package Hennig\Common
+ */
 class Config
 {
     /**
      * Must be called first to init the project
      *
      * @param array $params
-     * @throws \Exception
+     * @throws Exception
      */
     static public function init($params = [])
     {
@@ -31,9 +38,9 @@ class Config
      */
     static protected function initLang($lang)
     {
-        putenv("LANGUAGE=$lang");
+        putenv("LANGUAGE={$lang}.UTF-8");
         //Default locale
-        setlocale(LC_MESSAGES, "C.UTF-8");
+        setlocale(LC_MESSAGES, "{$lang}.UTF-8");
         //.po .mo name
         $domain = 'messages';
         bindtextdomain($domain, BASE_DIR . 'lang');
@@ -46,7 +53,7 @@ class Config
      *
      * @param string $key
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     static public function getOrError($key)
     {
@@ -56,16 +63,6 @@ class Config
         }
 
         return $value;
-    }
-
-    /**
-     * @param string $key
-     * @param string $default
-     * @return mixed|string
-     */
-    static public function env($key, $default = '')
-    {
-        return defined($key) ? constant($key) : $default;
     }
 
     /**
@@ -79,17 +76,23 @@ class Config
     {
         static $return = null;
         if ($return === null) {
-//            if (!defined('BASE_DIR')) {
-//                throw new EWrongSetting('BASE_DIR');
-//            }
-            
-            if (!\file_exists(BASE_DIR . 'config.json')) {
+            if (!file_exists(BASE_DIR . 'config.json')) {
                 return $default;
             }
-            
-            $return = json_decode(file_get_contents(BASE_DIR . 'config.json'), true);        
+
+            $return = json_decode(file_get_contents(BASE_DIR . 'config.json'), true);
         }
 
         return $return[$key] ?? '' ?: $default;
+    }
+
+    /**
+     * @param string $key
+     * @param string $default
+     * @return mixed|string
+     */
+    static public function env($key, $default = '')
+    {
+        return defined($key) ? constant($key) : $default;
     }
 }

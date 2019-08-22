@@ -325,15 +325,23 @@ let H = {
 
         reader.readAsDataURL(file);
     },
-    showQuery: function (msg, callback) {
+    /**
+     * Ask for confirmation
+     * options
+     *   default_answer: Default action when timeout
+     *
+     * @param msg
+     * @param callback
+     * @param options
+     */
+    showQuery: function (msg, callback, options) {
         callback = callback || function (r) {
             console.info(r)
         };
-        let notify = $.notify({
-            title: 'Confirmação',
-            message: msg
-        }, {
-            showProgressbar: true,
+
+        let answer = options.default_answer || false;
+        options = $.extend({
+            showProgressbar: false,
             animate: {
                 enter: 'animated bounceIn',
                 exit: 'animated bounceOut'
@@ -341,6 +349,9 @@ let H = {
             placement: {
                 from: "top",
                 align: "center"
+            },
+            onClosed: function () {
+                callback(answer);
             },
             z_index: 1051,
             template: `
@@ -352,11 +363,6 @@ let H = {
 	<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>
 	<span data-notify="icon"></span>
 	<span data-notify="title">{1}</span>
-	<div class="progress" data-notify="progressbar">
-        <div class="progress-bar progress-bar-{0}" 
-            role="progressbar" 
-            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-    </div>
 	<hr>
 	<span data-notify="message">{2}</span>
 	<div class="row justify-content-center mt-2">
@@ -374,18 +380,26 @@ let H = {
         </button>
     </div>
 </div>`
-        });
+        }, options || {});
+
+        let notify = $.notify({
+            title: 'Confirmação',
+            message: msg
+        }, options);
         notify.$ele.find('.btn-1').on('click', function () {
-            callback(true);
+            answer = true;
+            notify.close();
         });
         notify.$ele.find('.btn-2').on('click', function () {
-            callback(false);
+            answer = false;
+            notify.close();
         });
     },
-    showSuccess: function (msg) {
+    showSuccess: function (msg, options) {
         $.notify({
             message: msg
-        }, {
+        }, $.extend({
+            delay: 1000,
             animate: {
                 enter: 'animated bounceIn',
                 exit: 'animated bounceOut'
@@ -396,31 +410,32 @@ let H = {
             },
             z_index: 1051,
             type: 'success'
-        });
+        }, options || {}));
     },
-    showInfo: function (msg) {
+    showInfo: function (msg, options) {
         $.notify({
             message: msg
-        }, {
+        }, $.extend({
+            delay: 1000,
             animate: {
                 enter: 'animated bounceIn',
                 exit: 'animated bounceOut'
             },
             z_index: 1051,
             type: 'info'
-        });
+        }, options || {}));
     },
-    showError: function (msg) {
+    showError: function (msg, options) {
         $.notify({
             message: msg
-        }, {
+        }, $.extend({
             animate: {
                 enter: 'animated bounceIn',
                 exit: 'animated bounceOut'
             },
             z_index: 1051,
             type: 'danger'
-        });
+        }, options || {}));
     },
     loadAssets: function (links, callback) {
         let deferreds = [];

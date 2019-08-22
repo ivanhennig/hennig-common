@@ -2,7 +2,6 @@
 
 namespace Hennig\Builder;
 
-
 class Control
 {
     use HasEvents;
@@ -10,21 +9,25 @@ class Control
     public $id = "";
     /**
      * Name, match db field name
+     *
      * @var string
      */
     public $name = "";
     /**
      * Label
+     *
      * @var string
      */
     public $title = "";
     /**
      * Which tab must appear
+     *
      * @var string
      */
     public $tabref = "";
     /**
      * Helper text when mouse is over
+     *
      * @var string
      */
     public $placeholder = "";
@@ -34,12 +37,18 @@ class Control
         $this->init();
     }
 
+    /**
+     * @return $this
+     */
     public function init()
     {
         $this->id = uniqid();
         return $this;
     }
 
+    /**
+     * @return Control
+     */
     static public function Instance()
     {
         $return = new static;
@@ -94,6 +103,7 @@ class Control
 
     /**
      * Helper text when mouse is over
+     *
      * @param string $value
      * @return $this
      */
@@ -113,6 +123,9 @@ class Control
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function beforeJson()
     {
         return $this;
