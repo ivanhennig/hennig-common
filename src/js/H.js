@@ -931,10 +931,10 @@ function createComponent(a_container, a_param, a_form_param) {
         }
         if (l_subtype === "password") {
             $form_control.attr("type", "password");
-            $inputgroup_preaddon = $('<div class="input-group-prepend"><i class="fa fa-key" aria-hidden="true"></i></div>');
+            $inputgroup_preaddon = $('<div class="input-group-prepend"><div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div></div>');
         }
         if (l_subtype === "email") {
-            $inputgroup_preaddon = $('<div class="input-group-prepend "><i class="fa fa-envelope-o" aria-hidden="true"></i></div>');
+            $inputgroup_preaddon = $('<div class="input-group-prepend "><div class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></div></div>');
         }
 
         $label = $("<label for='" + l_id + "'>" + l_title + "</label>");
@@ -980,7 +980,7 @@ function createComponent(a_container, a_param, a_form_param) {
                 };
             }
             if (l_subtype === "currency") {
-                $inputgroup_preaddon = $('<div class="input-group-prepend">' + g_current_locale.currency.symbol + '</div>');
+                $inputgroup_preaddon = $(`<div class="input-group-prepend"><div class="input-group-text">${g_current_locale.currency.symbol}</div></div>`);
             }
             if (window.AutoNumeric) {
                 l_autonumeric = new AutoNumeric($form_control[0], l_autonumeric_options);
