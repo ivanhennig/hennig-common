@@ -4,6 +4,6 @@ namespace Hennig\Builder;
 
 class InputNumberCurrency extends InputNumber
 {
-    public $subtype = "currency";
-
+    /** @var string */
+    public $subtype = self::ST_CURRENCY;
 }

@@ -2,6 +2,11 @@
 
 namespace Hennig\Builder;
 
+/**
+ * Class InputText
+ *
+ * @package Hennig\Builder
+ */
 class InputText extends InputCommon
 {
     /**

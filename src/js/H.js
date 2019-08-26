@@ -9,6 +9,13 @@ export default new class {
     clearValidation = 'H.clearValidation';
     defaultAction = 'H.defaultAction';
     formInit = 'H.formInit';
+
+    TYP_DATETIME = 'datetime';
+
+    ST_DATETIME = 'datetime';
+    ST_DATE = 'date';
+    ST_TIME = 'time';
+
     lang = {
         offlineError: 'Você está desconectado.',
         yes: 'Sim',
@@ -961,16 +968,29 @@ export default new class {
                     // $form_control.attr("data-vmax", l_opts.max);
                 }
             }
-            if (l_type === "datetime") {
+            if (l_type === this.TYP_DATETIME) {
                 $inputgroup_addon = $('<div class="input-group-append" data-toggle="datetimepicker"><div class="input-group-text"><i class="la la-calendar"></i></div></div>');
                 //Pra fazer o picker funcionar
                 $inputgroup_addon.data("target", $form_control);
                 $form_control.data("target", $form_control);
                 $form_control.addClass("datetimepicker-input");
-                $form_control.datetimepicker({
-                    locale: moment.locale(),
-                    format: 'L LTS'
-                });
+
+                if (l_subtype === this.ST_DATE) {
+                    $form_control.datetimepicker({
+                        locale: moment.locale(),
+                        format: 'L'
+                    });
+                } else if (l_subtype === this.ST_TIME) {
+                    $form_control.datetimepicker({
+                        locale: moment.locale(),
+                        format: 'LTS'
+                    });
+                } else {
+                    $form_control.datetimepicker({
+                        locale: moment.locale(),
+                        format: 'L LTS'
+                    });
+                }
             }
 
             $form_group.on(H.setValue, function (e, a_values) {

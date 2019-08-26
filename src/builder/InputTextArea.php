@@ -2,9 +2,17 @@
 
 namespace Hennig\Builder;
 
+/**
+ * Class InputTextArea
+ *
+ * @package Hennig\Builder
+ */
 class InputTextArea extends InputCommon
 {
-    public $type = "textarea";
+    /** @var string */
+    public $type = self::TYP_TEXTAREA;
+
+    /** @var int */
     public $rows = 3;
 
     /**
@@ -16,5 +24,4 @@ class InputTextArea extends InputCommon
         $this->rows = $rows;
         return $this;
     }
-
 }

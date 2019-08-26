@@ -2,9 +2,16 @@
 
 namespace Hennig\Builder;
 
-class InputNumberInteger extends InputCommon
+/**
+ * Class InputNumberInteger
+ *
+ * @package Hennig\Builder
+ */
+class InputNumberInteger extends InputNumber
 {
-    public $type = "number";
-    public $subtype = "integer";
+    /** @var string */
+    public $subtype = self::ST_INTEGER;
 
+    /** @var int */
+    public $decimal = 0;
 }

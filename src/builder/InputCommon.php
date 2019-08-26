@@ -7,6 +7,20 @@ class InputCommon extends Control
     const ALIGN_LEFT = "left";
     const ALIGN_RIGHT = "right";
     const ALIGN_CENTER = "center";
+
+    const TYP_NUMBER = 'number';
+    const TYP_SELECT = 'select';
+    const TYP_TEXTAREA = 'textarea';
+    const TYP_DATETIME = 'datetime';
+
+    const ST_FLOAT = 'float';
+    const ST_CURRENCY = 'currency';
+    const ST_INTEGER = 'integer';
+    const ST_PASSWORD = 'password';
+    const ST_EMAIL = 'email';
+    const ST_DATE = 'date';
+    const ST_TIME = 'time';
+    const ST_DATETIME = 'datetime';
     /**
      * Component type, default text
      * @var string
