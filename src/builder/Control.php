@@ -47,7 +47,7 @@ class Control
     }
 
     /**
-     * @return Control
+     * @return $this
      */
     static public function Instance()
     {

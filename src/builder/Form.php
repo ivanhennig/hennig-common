@@ -110,19 +110,19 @@ class Form extends Card implements Jsonable
 
 
             $this->tabs[] = Tab::Instance()
-                ->setId("tabAudit")
-                ->setTitle("Audit");
+                ->setId('tabAudit')
+                ->setTitle('Audit');
 
             $this->controls[] = InputTime::Instance()
-                ->setTabref("tabAudit")
-                ->setName("created_at")
-                ->setTitle("Created at")
+                ->setTabref('tabAudit')
+                ->setName('created_at')
+                ->setTitle(_('Created at'))
                 ->setReadonly(true);
 
             $this->controls[] = InputTime::Instance()
-                ->setTabref("tabAudit")
-                ->setName("updated_at")
-                ->setTitle("Updated at")
+                ->setTabref('tabAudit')
+                ->setName('updated_at')
+                ->setTitle(_('Updated at'))
                 ->setReadonly(true);
         }
         return $this;

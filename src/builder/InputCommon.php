@@ -88,7 +88,7 @@ class InputCommon extends Control
 
     /**
      * @param bool $readonly
-     * @return static
+     * @return InputCommon
      */
     public function setReadonly($readonly)
     {
