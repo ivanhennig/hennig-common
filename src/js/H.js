@@ -12,9 +12,11 @@ export default new class {
 
     TYP_DATETIME = 'datetime';
 
+    ST_PASSWORD = 'password';
     ST_DATETIME = 'datetime';
     ST_DATE = 'date';
     ST_TIME = 'time';
+    ST_EMAIL = 'email';
 
     lang = {
         offlineError: 'Você está desconectado.',
@@ -898,15 +900,18 @@ export default new class {
             } else {
                 $form_control = $(`<input class='form-control' type='text' id='${l_id}' name='${l_name}' />`);
             }
-            if (l_subtype === "password") {
+
+            if (l_subtype === this.ST_PASSWORD) {
                 $form_control.attr("type", "password");
+                $form_control.attr("autocomplete", "new-password");
                 $inputgroup_preaddon = $('<div class="input-group-prepend"><div class="input-group-text"><i class="la la-key" aria-hidden="true"></i></div></div>');
             }
-            if (l_subtype === "email") {
+
+            if (l_subtype === this.ST_EMAIL) {
                 $inputgroup_preaddon = $('<div class="input-group-prepend "><div class="input-group-text"><i class="la la-envelope-o" aria-hidden="true"></i></div></div>');
             }
 
-            $label = $("<label for='" + l_id + "'>" + l_title + "</label>");
+            $label = $(`<label for='${l_id}'>${l_title}</label>`);
             if (l_opts.onchange) {
                 $form_control.on("change", function () {
                     H.evalCode(l_opts.onchange);
@@ -921,15 +926,19 @@ export default new class {
             if (l_opts.align) {
                 $form_control.css("text-align", l_opts.align);
             }
+
             if (l_opts.maxlength) {
                 $form_control.attr("maxlength", l_opts.maxlength);
             }
+
             if (l_opts.placeholder) {
                 $form_control.attr("placeholder", l_opts.placeholder);
             }
+
             if (l_opts.mask) {
                 $form_control.mask(l_opts.mask);
             }
+
             var l_autonumeric = null;
             var l_autonumeric_options = {
                 modifyValueOnWheel: false
