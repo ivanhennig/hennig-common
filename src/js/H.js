@@ -1,30 +1,34 @@
+/**
+ * @property TYP_SELECT
+ */
 export default new class {
-    sessionStorageKey = 'H';
-    show = 'H.show';
-    onstore = 'H.onstore';
-    getValue = 'H.getValue';
-    setValue = 'H.setValue';
-    setActiveTab = 'H.setActiveTab';
-    setValidation = 'H.setValidation';
-    clearValidation = 'H.clearValidation';
-    defaultAction = 'H.defaultAction';
-    formInit = 'H.formInit';
-
-    TYP_DATETIME = 'datetime';
-
-    ST_PASSWORD = 'password';
-    ST_DATETIME = 'datetime';
-    ST_DATE = 'date';
-    ST_TIME = 'time';
-    ST_EMAIL = 'email';
-
-    lang = {
-        offlineError: 'Você está desconectado.',
-        yes: 'Sim',
-        no: 'Não',
-    };
-
     constructor() {
+        this.sessionStorageKey = 'H';
+        this.show = 'H.show';
+        this.onstore = 'H.onstore';
+        this.getValue = 'H.getValue';
+        this.setValue = 'H.setValue';
+        this.setActiveTab = 'H.setActiveTab';
+        this.setValidation = 'H.setValidation';
+        this.clearValidation = 'H.clearValidation';
+        this.defaultAction = 'H.defaultAction';
+        this.formInit = 'H.formInit';
+        //
+        this.TYP_DATETIME = 'datetime';
+        this.TYP_SELECT = 'select';
+        //
+        this.ST_PASSWORD = 'password';
+        this.ST_DATETIME = 'datetime';
+        this.ST_DATE = 'date';
+        this.ST_TIME = 'time';
+        this.ST_EMAIL = 'email';
+
+        this.lang = {
+            offlineError: 'Você está desconectado.',
+            yes: 'Sim',
+            no: 'Não'
+        };
+
         this.init();
         this.initVue();
         this.initJQuery();
@@ -1031,7 +1035,7 @@ export default new class {
                 }
             });
 
-        } else if (l_type === "select") {
+        } else if (l_type === this.TYP_SELECT) {
             $form_group = $("<div class='form-group " + l_grid_system + "'></div>");
             $form_control = $("<select class='form-control' id='" + l_id + "' name='" + l_name + "' />");
             $label = $("<label for='" + l_id + "'>" + l_title + "</label>");
