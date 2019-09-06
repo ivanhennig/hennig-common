@@ -1,6 +1,3 @@
-/**
- * @property TYP_SELECT
- */
 export default new class {
     constructor() {
         this.sessionStorageKey = 'H';
@@ -254,7 +251,7 @@ export default new class {
     }
 
     formatDatetime(v) {
-        return window.moment(v || {}).format('L LTS');
+        return window.moment.utc(v || {}).local().format('L LTS');
     }
 
     /**
@@ -610,7 +607,8 @@ export default new class {
         };
 
         var lCurrent = $('body').scrollTop();
-        var $elem = $(".section." + l_page[0]);
+        let $elem = $(".section." + l_page[0]);
+        let $elems = $(".linked." + l_page[0]);
         if ($elem.length === 0) {
             return;
         }
@@ -621,8 +619,10 @@ export default new class {
                 scrollTop: lNew
             }, Math.max(500, Math.abs(lCurrent - lNew) / 10));
         } else {
+            $(".linked").not($elems).hide();
             $(".section").not($elem).not(".footer").hide();
             $elem.show();
+            $elems.show();
         }
 
         if (($elem.hasClass("load") || $elem.is('[data-load]')) && !$elem.hasClass("loaded")) {
@@ -631,20 +631,22 @@ export default new class {
             let load = $elem.data('load') || l_page[0];
             let main_script = $elem.data('script');
             let init_function = $elem.data('init');
-            H.rpc('Page', 'load', [load], function (r) {
+            H.rpc('Page', 'load', [load], async function (r) {
                 $elem.empty();
                 if (r) {
                     $elem.html(r);
                     if (main_script) {
-                        H.loadAsset(main_script).then(() => {
+                        if (main_script.match(/mjs$/)) {
+                            init_function = await import(main_script);
+                            init_function.default($elem);
+                        } else {
+                            await H.loadAsset(main_script);
                             H.evalCode(init_function, [$elem]);
+                        }
+                    }
+
                             l_fn($elem);
                             l_refresh_active();
-                        });
-                    } else {
-                        l_fn($elem);
-                        l_refresh_active();
-                    }
                 }
             });
         } else {
@@ -1014,7 +1016,7 @@ export default new class {
                     if (l_autonumeric) {
                         l_autonumeric.set(l_value);
                     } else if ($form_control.is('.datetimepicker-input')) {
-                        $form_control.datetimepicker('date', window.moment(l_value))
+                        $form_control.datetimepicker('date', window.moment.utc(l_value).local())
                     } else {
                         $form_control.val(l_value);
                     }
