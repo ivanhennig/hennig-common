@@ -113,13 +113,13 @@ class Form extends Card implements Jsonable
                 ->setId('tabAudit')
                 ->setTitle('Audit');
 
-            $this->controls[] = InputTime::Instance()
+            $this->controls[] = InputDateTime::Instance()
                 ->setTabref('tabAudit')
                 ->setName('created_at')
                 ->setTitle(_('Created at'))
                 ->setReadonly(true);
 
-            $this->controls[] = InputTime::Instance()
+            $this->controls[] = InputDateTime::Instance()
                 ->setTabref('tabAudit')
                 ->setName('updated_at')
                 ->setTitle(_('Updated at'))
