@@ -986,8 +986,8 @@ export default new class {
             if (l_type === this.TYP_DATETIME) {
                 $inputgroup_addon = $('<div class="input-group-append" data-toggle="datetimepicker"><div class="input-group-text"><i class="la la-calendar"></i></div></div>');
                 //Pra fazer o picker funcionar
-                $inputgroup_addon.data("target", $form_control);
-                $form_control.data("target", $form_control);
+                $inputgroup_addon.data("target", "#" + l_id);
+                $form_control.data("target", "#" + l_id);
                 $form_control.addClass("datetimepicker-input");
 
                 if (l_subtype === this.ST_DATE) {
@@ -1124,9 +1124,9 @@ export default new class {
         if (this.isTrue(l_opts.required)) {
             $form_control.attr("required", "required");
         }
-        // if (this.isTrue(l_opts.readonly)) {
-        //     $form_control.attr("disabled", "disabled");
-        // }
+        if (this.isTrue(l_opts.readonly)) {
+            $form_control.attr("disabled", "disabled");
+        }
         if (l_opts.placeholder) {
             $form_control.attr("title", l_opts.placeholder);
         }
