@@ -14,15 +14,24 @@
       "Hennig\\Builder\\": "src/builder"
     }
   },
+  "scripts": {
+    "post-update-cmd": [
+      "Hennig\\Common\\SetupScripts::publishJS"
+    ],
+    "post-install-cmd": [
+      "Hennig\\Common\\SetupScripts::publishJS"
+    ]
+  },
   "require": {
     "ext-openssl": "*",
     "ext-json": "*",
     "ext-curl": "*",
     "ext-gettext": "*",
-    "illuminate/database": "^5.8",
-    "ramsey/uuid": "^3.8",
-    "illuminate/events": "^5.8",
-    "illuminate/validation": "^5.8",
-    "moontoast/math": "*"
+    "illuminate/database": "*",
+    "ramsey/uuid": "*",
+    "illuminate/events": "*",
+    "illuminate/validation": "*",
+    "moontoast/math": "*",
+    "matthiasmullie/minify": "^1.3"
   }
 }
