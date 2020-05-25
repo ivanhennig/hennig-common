@@ -1,5 +1,6 @@
 export default new class {
     constructor() {
+        this.prefix = '';
         this.sessionStorageKey = 'H';
         this.show = 'H.show';
         this.onstore = 'H.onstore';
@@ -27,8 +28,21 @@ export default new class {
         };
 
         this.init();
-        this.initVue();
-        this.initJQuery();
+        if (window.Vue) {
+            this.initVue(window.Vue);
+        }
+        if (window.jQuery) {
+            this.initJQuery(window.jQuery);
+        }
+    }
+
+    setup(options) {
+        options = options || {};
+        this.prefix = options.prefix || '';
+
+        if (options.vue) {
+            this.initVue(options.vue);
+        }
     }
 
     init() {
@@ -38,29 +52,45 @@ export default new class {
         }
     }
 
-    initVue() {
-        Vue.filter('formatDateTime', (value) => {
+    initVue(Vue) {
+        this.Vue = Vue;
+        this.Vue.filter('formatDateTime', (value) => {
             return this.formatDatetime(value);
         });
     }
 
-    initJQuery() {
-        // Serialize helper
-        $.fn.serializeObject = function () {
-            let result = {}, serializedArray = this.serializeArray();
-            $.each(serializedArray, function () {
-                let name = this.name.replace('[]', '');
-                if (result[name]) {
-                    if (!result[name].push) {
-                        result[name] = [result[name]];
+    initJQuery(jQuery) {
+        this.jQuery = jQuery;
+        // Override of val method of jQuery.
+        // Will affect val(), serialize(), serializeArray(), serializeObject()
+        (function ($) {// eslint-disable-line id-length
+            // Serialize helper
+            $.fn.serializeObject = function () {
+                let dates = {};
+                $.each(this.filter('.datetimepicker-input'), (index, element) => {
+                    if ($(element).val()) {
+                        dates[element.name] = $(element).datetimepicker('viewDate').toISOString(true);
+                    } else {
+                        dates[element.name] = '';
                     }
-                    result[name].push(this.value || '');
-                } else {
-                    result[name] = this.value || '';
-                }
-            });
-            return result;
-        };
+                });
+
+                let result = {},
+                    serializedArray = this.not('.datetimepicker-input').serializeArray();
+                $.each(serializedArray, function () {
+                    let name = this.name.replace('[]', '');
+                    if (result[name]) {
+                        if (!result[name].push) {
+                            result[name] = [result[name]];
+                        }
+                        result[name].push(this.value || '');
+                    } else {
+                        result[name] = this.value || '';
+                    }
+                });
+                return $.extend(result, dates);
+            };
+        })(jQuery);
     }
 
     /**
@@ -82,7 +112,8 @@ export default new class {
                 today: 'la la-calendar-check-o',
                 clear: 'la la-trash',
                 close: 'la la-times'
-            }
+            },
+            useCurrent: false
         });
     }
 
@@ -109,6 +140,23 @@ export default new class {
             return;
         }
 
+        let l_process_json = (l_data) => {
+            if ("method" in l_data) {//Servidor enviando comandos
+                this.evalCode(l_data.method, l_data.params);
+            } else if ("error" in l_data && l_data.error) {//Server sent an error
+                if (l_data.error.trace) {
+                    console.warn(l_data.error.trace);
+                }
+
+                let errorShow = l_callback(null, l_data.error);
+                if (errorShow === undefined) {
+                    this.showError(l_data.error.message);
+                }
+            } else if ("result" in l_data) {//Servidor enviando a resposta
+                l_callback(l_data.result, null);
+            }
+        }
+
         let l_process = (lines) => {
             lines = lines.split(/\n/);
             for (let i in lines) {
@@ -120,29 +168,17 @@ export default new class {
                 } catch (ex) {
                     return;
                 }
-                if ("method" in l_data) {//Servidor enviando comandos
-                    this.evalCode(l_data.method, l_data.params);
-                } else if ("error" in l_data && l_data.error) {//Server sent an error
-                    if (l_data.error.trace) {
-                        console.warn(l_data.error.trace);
-                    }
 
-                    let errorShow = l_callback(null, l_data.error);
-                    if (errorShow === undefined) {
-                        this.showError(l_data.error.message);
-                    }
-                } else if ("result" in l_data) {//Servidor enviando a resposta
-                    l_callback(l_data.result, null);
-                }
+                l_process_json(l_data);
             }
         };
 
         let l_stop = false;
         if (progresscb) {
             // Pooling for progress
-            let l_progress = function () {
+            let l_progress = () => {
                 $.ajax({
-                    url: 'progress.php',
+                    url: this.prefix + 'progress.php',
                     timeout: 10000,
                     async: true
                 }).done(function (a_data, textStatus, xhr) {
@@ -155,28 +191,46 @@ export default new class {
             setTimeout(l_progress, 1000);
         }
         let lastResponseLength = 0;
-        $.ajax({
-            url: 'rpc.php?' + aclass + '@' + amethod,
-            type: 'POST',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
-                method: amethod,
-                params: aparams
-            }),
-            processData: false,
-            async: true,
-        }).fail(function (xhr, textStatus, errorThrown) {
-            if (textStatus === "parsererror") {
-                l_callback(null, {"message": xhr.responseText});
-            } else {
-                l_callback(null, {"message": errorThrown});
-            }
-            l_stop = true;
-        }).done(function (a_data, textStatus, xhr) {
-            l_process(xhr.responseText.substring(lastResponseLength));
-            l_stop = true;
+        let payload = JSON.stringify({
+            method: amethod,
+            params: aparams
         });
+        if (this.jQuery && this.jQuery.ajax) {
+            this.jQuery.ajax({
+                url: this.prefix + 'rpc.php?' + aclass + '@' + amethod,
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: payload,
+                processData: false,
+                async: true,
+            }).fail(function (xhr, textStatus, errorThrown) {
+                if (textStatus === "parsererror") {
+                    l_callback(null, {"message": xhr.responseText});
+                } else {
+                    l_callback(null, {"message": errorThrown});
+                }
+                l_stop = true;
+            }).done(function (a_data, textStatus, xhr) {
+                l_process(xhr.responseText.substring(lastResponseLength));
+                l_stop = true;
+            });
+        } else {
+            fetch(this.prefix + `rpc.php?${aclass}@${amethod}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: payload
+                })
+                .then((r) => {
+                    return r.json();
+                })
+                .then((r) => {
+                    return l_process_json(r);
+                })
+        }
     }
 
     /**
@@ -645,8 +699,8 @@ export default new class {
                         }
                     }
 
-                            l_fn($elem);
-                            l_refresh_active();
+                    l_fn($elem);
+                    l_refresh_active();
                 }
             });
         } else {
