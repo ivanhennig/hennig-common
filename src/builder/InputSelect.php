@@ -29,7 +29,7 @@ class InputSelect extends InputCommon
      */
     public function init()
     {
-        $this->placeholder = '--' . _('Select one') . '--';
+        $this->placeholder = '--' . __('Select one') . '--';
         return parent::init();
     }
 
@@ -43,8 +43,8 @@ class InputSelect extends InputCommon
     {
         $this->multiselect = $multiselect;
 
-        if ($this->placeholder === '--' . _('Select one') . '--') {
-            $this->placeholder = '--' . _('Select one or many') . '--';
+        if ($this->placeholder === '--' . __('Select one') . '--') {
+            $this->placeholder = '--' . __('Select one or many') . '--';
         }
 
         return $this;

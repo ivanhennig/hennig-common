@@ -14,14 +14,6 @@
       "Hennig\\Builder\\": "src/builder"
     }
   },
-  "scripts": {
-    "post-update-cmd": [
-      "Hennig\\Common\\SetupScripts::publishJS"
-    ],
-    "post-install-cmd": [
-      "Hennig\\Common\\SetupScripts::publishJS"
-    ]
-  },
   "require": {
     "ext-openssl": "*",
     "ext-json": "*",

@@ -18,9 +18,9 @@ class InputBoolean extends InputSelect
     public function init()
     {
         $this->items = [
-            '' => '--' . _('Select one') . '--',
-            '1 ' => _('Yes'),
-            '0 ' => _('No')
+            '' => '--' . __('Select one') . '--',
+            '1 ' => __('Yes'),
+            '0 ' => __('No')
         ];
 
         return parent::init();
