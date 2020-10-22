@@ -45,11 +45,16 @@ class InputCommon extends Control
     public $align = InputCommon::ALIGN_LEFT;
     public $required = false;
     public $readonly = false;
+
     /**
-     *
      * @var string
      */
     public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
+
+    /**
+     * @var string
+     */
+    public $initialValue;
 
     /**
      * Texto, se informado, será posicionado abaixo do input
@@ -103,6 +108,16 @@ class InputCommon extends Control
     public function setAlign($align)
     {
         $this->align = $align;
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return static
+     */
+    public function setInitialValue($value)
+    {
+        $this->initialValue = $value;
         return $this;
     }
 
