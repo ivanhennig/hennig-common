@@ -3,10 +3,9 @@
 namespace Hennig\Builder;
 
 /**
- * Class InputHidden
+ * Class VueInstance
  *
- * Render an Vue component
- *
+ * Render a special built Vue component
  *
  * @package Hennig\Builder
  */
@@ -18,6 +17,9 @@ class VueInstance extends InputCommon
     /** @var string Must have the name of globally registered component */
     public $subtype = '';
 
+    /** @var array */
+    public $props = [];
+
     /**
      * @param string $name
      * @return $this
@@ -25,6 +27,16 @@ class VueInstance extends InputCommon
     public function setComponentName(string $name)
     {
         $this->subtype = $name;
+        return $this;
+    }
+
+    /**
+     * @param array $props
+     * @return $this
+     */
+    public function setComponentProps($props)
+    {
+        $this->props = $props;
         return $this;
     }
 }
