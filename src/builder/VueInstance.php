@@ -20,9 +20,11 @@ class VueInstance extends InputCommon
 
     /**
      * @param string $name
+     * @return $this
      */
-    public function setComponentName(string $name): void
+    public function setComponentName(string $name)
     {
         $this->subtype = $name;
+        return $this;
     }
 }
