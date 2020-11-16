@@ -51,7 +51,7 @@ class InputCommon extends Control
     /**
      * @var string
      */
-    public $grid_system = "col-md-8 col-lg-6";
+    public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
 
     /**
      * @var string
