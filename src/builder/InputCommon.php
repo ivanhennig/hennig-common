@@ -8,11 +8,13 @@ class InputCommon extends Control
     const ALIGN_RIGHT = "right";
     const ALIGN_CENTER = "center";
 
+    const TYP_TEXT = 'text';
     const TYP_NUMBER = 'number';
     const TYP_SELECT = 'select';
     const TYP_TEXTAREA = 'textarea';
     const TYP_DATETIME = 'datetime';
 
+    const ST_HIDDEN = 'hidden';
     const ST_FLOAT = 'float';
     const ST_CURRENCY = 'currency';
     const ST_INTEGER = 'integer';
@@ -25,7 +27,7 @@ class InputCommon extends Control
      * Component type, default text
      * @var string
      */
-    public $type = "text";
+    public $type = self::TYP_TEXT;
     public $subtype = "";
     /**
      * Uniq id, randomly created
@@ -49,7 +51,7 @@ class InputCommon extends Control
     /**
      * @var string
      */
-    public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
+    public $grid_system = "col-md-8 col-lg-6";
 
     /**
      * @var string
