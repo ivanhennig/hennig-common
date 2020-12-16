@@ -51,11 +51,6 @@ class InputCommon extends Control
     /**
      * @var string
      */
-    public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
-
-    /**
-     * @var string
-     */
     public $initialValue;
 
     /**
@@ -65,21 +60,6 @@ class InputCommon extends Control
     public function setHelp($help)
     {
         $this->help = $help;
-        return $this;
-    }
-
-    /**
-     * Bootstrap grid system
-     *
-     * Class prefix
-     * .col-sm- .col-md- .col-lg- .col-xl-
-     * >=540px  >=720px  >=960px  >=1140px
-     *
-     * @param string $grid_system
-     */
-    public function setGridSystem($grid_system)
-    {
-        $this->grid_system = $grid_system;
         return $this;
     }
 

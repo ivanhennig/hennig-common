@@ -7,30 +7,39 @@ class Control
     use HasEvents;
 
     public $id = "";
+
     /**
      * Name, match db field name
      *
      * @var string
      */
     public $name = "";
+
     /**
      * Label
      *
      * @var string
      */
     public $title = "";
+
     /**
      * Which tab must appear
      *
      * @var string
      */
     public $tabref = "";
+
     /**
      * Helper text when mouse is over
      *
      * @var string
      */
     public $placeholder = "";
+
+    /**
+     * @var string
+     */
+    public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
 
     private function __construct()
     {
@@ -128,6 +137,22 @@ class Control
      */
     public function beforeJson()
     {
+        return $this;
+    }
+
+    /**
+     * Bootstrap grid system
+     *
+     * Class prefix
+     * .col-sm- .col-md- .col-lg- .col-xl-
+     * >=540px  >=720px  >=960px  >=1140px
+     *
+     * @param string $grid_system
+     * @return $this
+     */
+    public function setGridSystem($grid_system)
+    {
+        $this->grid_system = $grid_system;
         return $this;
     }
 }
