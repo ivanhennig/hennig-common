@@ -3,11 +3,11 @@
 namespace Hennig\Builder;
 
 /**
- * Class Label
+ * Class Legend
  *
  * @package Hennig\Builder
  */
-class Label extends Control
+class Legend extends Control
 {
-    public $type = "label";
+    public $type = 'legend';
 }
