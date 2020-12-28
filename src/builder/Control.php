@@ -41,6 +41,16 @@ class Control
      */
     public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
 
+    /**
+     * @var string
+     */
+    public $initialValue;
+
+    /**
+     * @var string[]
+     */
+    public $classes;
+
     private function __construct()
     {
         $this->init();
@@ -152,7 +162,37 @@ class Control
      */
     public function setGridSystem($grid_system)
     {
+        if ($grid_system === '100') {
+            $grid_system = 'offset-md-2 col-md-8 offset-lg-0 col-lg-12';
+        } elseif ($grid_system === '75') {
+            $grid_system = 'offset-md-2 col-md-6 offset-lg-0 col-lg-9';
+        } elseif ($grid_system === '50') {
+            $grid_system = 'offset-md-2 col-md-6 offset-lg-0 col-lg-6';
+        } elseif ($grid_system === '25') {
+            $grid_system = 'offset-md-2 col-md-2 offset-lg-0 col-lg-3';
+        }
+
         $this->grid_system = $grid_system;
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setInitialValue($value)
+    {
+        $this->initialValue = $value;
+        return $this;
+    }
+
+    /**
+     * @param string[] $classes
+     * @return $this
+     */
+    public function setClasses(array $classes)
+    {
+        $this->classes = $classes;
         return $this;
     }
 }

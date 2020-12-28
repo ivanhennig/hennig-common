@@ -49,11 +49,6 @@ class InputCommon extends Control
     public $readonly = false;
 
     /**
-     * @var string
-     */
-    public $initialValue;
-
-    /**
      * Texto, se informado, será posicionado abaixo do input
      * @var string
      */
@@ -90,16 +85,6 @@ class InputCommon extends Control
     public function setAlign($align)
     {
         $this->align = $align;
-        return $this;
-    }
-
-    /**
-     * @param string $value
-     * @return static
-     */
-    public function setInitialValue($value)
-    {
-        $this->initialValue = $value;
         return $this;
     }
 
