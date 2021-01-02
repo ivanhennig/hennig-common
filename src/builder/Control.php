@@ -39,7 +39,10 @@ class Control
     /**
      * @var string
      */
-    public $grid_system = "offset-md-2 col-md-8 offset-lg-0 col-lg-6";
+    public $grid_system = "col-md-8 col-lg-6";
+
+    /** @var bool */
+    public $grid_break_after = false;
 
     /**
      * @var string
@@ -163,16 +166,27 @@ class Control
     public function setGridSystem($grid_system)
     {
         if ($grid_system === '100') {
-            $grid_system = 'offset-md-2 col-md-8 offset-lg-0 col-lg-12';
+            $grid_system = 'col-md-8 col-lg-12';
         } elseif ($grid_system === '75') {
-            $grid_system = 'offset-md-2 col-md-6 offset-lg-0 col-lg-9';
+            $grid_system = 'col-md-8 col-lg-9';
         } elseif ($grid_system === '50') {
-            $grid_system = 'offset-md-2 col-md-6 offset-lg-0 col-lg-6';
+            $grid_system = 'col-md-8 col-lg-6';
+        } elseif ($grid_system === '33') {
+            $grid_system = 'col-sm-6 col-md-4';
         } elseif ($grid_system === '25') {
-            $grid_system = 'offset-md-2 col-md-2 offset-lg-0 col-lg-3';
+            $grid_system = 'col-sm-6 col-md-3 col-lg-2';
         }
 
         $this->grid_system = $grid_system;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setGridBreakAfter()
+    {
+        $this->grid_break_after = true;
         return $this;
     }
 
