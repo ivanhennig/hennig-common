@@ -15,7 +15,7 @@ class InputText extends InputCommon
      */
     public $maxlength = null;
 
-    /** @var ?string */
+    /** @var string|string[] */
     public $mask = null;
 
     /**
@@ -29,9 +29,9 @@ class InputText extends InputCommon
      * 99/99/9999
      * aaa-9999
      *
-     * @param string|null $mask
+     * @param string|string[] $mask
      */
-    public function setMask(?string $mask): InputText
+    public function setMask($mask): InputText
     {
         $this->mask = $mask;
         return $this;
