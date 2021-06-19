@@ -2,7 +2,7 @@
 
 namespace Hennig\Common\FTS;
 
-class MongoFTSSearch
+trait MongoFTSSearch
 {
     /**
      * Scope a query that matches a full text search of term.
