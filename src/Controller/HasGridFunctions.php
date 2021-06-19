@@ -12,6 +12,8 @@ trait HasGridFunctions
 {
     use HasModelFunctions;
 
+    protected $defaultSort = '_id';
+
     /**
      * @param $model
      * @param array $search Additional query
@@ -56,8 +58,10 @@ trait HasGridFunctions
         } else {
             $sortable = $builder->getModel()->sortable ?? [];
             foreach ($sort as $column => $direction) {
-                if (in_array($column, $sortable)) {
-                    if (is_string($direction)) {
+                if (in_array($column, array_keys($sortable))) {
+                    if (!empty($sortable[$column])) {
+                        $builder->orderByRaw($sortable[$column]);
+                    } else if (is_string($direction)) {
                         $builder->orderBy($column, $direction);
                     }
                 } else if (array_key_exists($column, $sortable)) {
