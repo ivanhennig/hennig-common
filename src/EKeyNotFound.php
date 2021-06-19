@@ -2,6 +2,11 @@
 
 namespace Hennig\Common;
 
+/**
+ * Class EKeyNotFound
+ *
+ * @package Hennig\Common
+ */
 class EKeyNotFound extends \Exception
 {
     public function __construct($key)
