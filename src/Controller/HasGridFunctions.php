@@ -45,7 +45,7 @@ trait HasGridFunctions
         $search = $params['search'] ?? [];
         $searchPhrase = $params['searchPhrase'] ?? '';
 
-        $uses = class_uses($builder);
+        $uses = class_uses($builder->getModel());
         if (array_intersect($uses, [MySQLFullTextSearch::class, MongoFTSSearch::class])) {
             $builder->search($searchPhrase);
         }
