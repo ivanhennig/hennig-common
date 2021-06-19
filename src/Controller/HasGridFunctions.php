@@ -3,7 +3,10 @@
 namespace Hennig\Common\Controller;
 
 use Hennig\Common\Exports\CollectionExport;
+use Hennig\Common\FTS\MongoFTSSearch;
+use Hennig\Common\FTS\MySQLFullTextSearch;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -39,9 +42,12 @@ trait HasGridFunctions
         /** @var Builder $builder */
         $builder = $this->getModel();
 
-        $uses = implode(',', class_uses($builder));
-        if (Str::match('MySQLFullTextSearch', $uses)) {
-            $builder->search($params['searchPhrase'] ?? []);
+        $search = $params['search'] ?? [];
+        $searchPhrase = $params['searchPhrase'] ?? '';
+
+        $uses = class_uses($builder);
+        if (array_intersect($uses, [MySQLFullTextSearch::class, MongoFTSSearch::class])) {
+            $builder->search($searchPhrase);
         }
 
         $count = 0;
@@ -49,8 +55,6 @@ trait HasGridFunctions
             $count = $builder->count();
         }
 
-        $search = $params['search'] ?? [];
-        $searchPhrase = $params['searchPhrase'] ?? '';
         $this->getSearch($builder, $search, $searchPhrase);
 
         if (empty($sort)) {
