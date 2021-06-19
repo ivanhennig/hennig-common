@@ -51,7 +51,7 @@ trait HasGridFunctions
         }
 
         $count = 0;
-        if (!empty($options['to_export'])) {
+        if (empty($options['to_export'])) {
             $count = $builder->count();
         }
 
@@ -74,14 +74,14 @@ trait HasGridFunctions
             }
         }
 
-        if (!empty($options['to_export'])) {
-            $rows = $builder->cursor();
-        } else {
+        if (empty($options['to_export'])) {
             $rows = $builder
                 ->when($limit > 0, function ($builder) use ($limit, $skip) {
                     return $builder->skip($skip)->limit($limit);
                 })
                 ->get();
+        } else {
+            $rows = $builder->cursor();
         }
 
         if (method_exists($this, 'getTransform')) {
@@ -90,16 +90,16 @@ trait HasGridFunctions
             });
         }
 
-        if (!empty($options['to_export'])) {
-            return $rows;
+        if (empty($options['to_export'])) {
+            return [
+                'rows' => $rows,
+                'current' => (int)$page,
+                'rowCount' => $limit,
+                'total' => (int)$count
+            ];
         }
 
-        return [
-            'rows' => $rows,
-            'current' => (int)$page,
-            'rowCount' => $limit,
-            'total' => (int)$count
-        ];
+        return $rows;
     }
 
     public function export()
