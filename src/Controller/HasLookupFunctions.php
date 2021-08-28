@@ -15,11 +15,14 @@ trait HasLookupFunctions
      */
     public function lookup(string $term, $filter = [])
     {
+        $term = trim($term);
         return $this
             ->getModel()
+            ->when($term, fn ($query) => $query
             ->where(fn ($query) => $query
                 ->where('name', 'like', "%{$term}%")
                 ->orWhere('_id', $term)
+            )
             )
             ->where($filter)
             ->orderBy('name')
