@@ -9,12 +9,21 @@ trait HasLookupFunctions
     /**
      * Method used by VueSelect
      *
-     * @param string $term
+     * @param string|array $term
      * @param array $filter
      * @return Collection
      */
-    public function lookup(string $term, $filter = [])
+    public function lookup($term, $filter = [])
     {
+        if (is_array($term)) {
+            return $this
+                ->getModel()
+                ->where($filter)
+                ->orderBy('name')
+                ->limit(100)
+                ->get(['_id', 'name']);
+        }
+
         $term = trim($term);
         return $this
             ->getModel()
