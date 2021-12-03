@@ -42,4 +42,27 @@ trait HasSaveFunctions
             'data' => $model
         ];
     }
+
+    public function saveMany($params)
+    {
+        if (!$params) {
+            throw new ESimple('Parâmetro de "saveMany" não informado');
+        }
+
+        if (!is_array($params)) {
+            throw new ESimple('Parâmetro de "saveMany" incorreto');
+        }
+
+        $responses = [];
+        foreach ($params as $p) {
+            try {
+                $r = $this->save($p);
+                $responses[] = ['result' => $r['data']];
+            } catch (\Throwable $e) {
+                $responses[] = ['error' => $e->getMessage()];
+            }
+        }
+
+        return 'ok';
+    }
 }
