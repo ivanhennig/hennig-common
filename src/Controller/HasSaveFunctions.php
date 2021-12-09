@@ -63,6 +63,6 @@ trait HasSaveFunctions
             }
         }
 
-        return 'ok';
+        return $responses;
     }
 }
