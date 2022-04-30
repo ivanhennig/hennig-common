@@ -34,8 +34,9 @@ trait HasGridFunctions
     public function records($params = null, $options = [])
     {
         $params = $params ?? Request::all();
-        $page = $_POST['current'] ?? '' ?: 1;
-        $limit = (int)($_POST['rowCount'] ?? '' ?: 25);
+
+        $page = $params['current'] ?? '' ?: 1;
+        $limit = (int)($params['rowCount'] ?? '' ?: 25);
         $sort = $params['sort'] ?? [];
 
         $skip = ($page - 1) * $limit;
