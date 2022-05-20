@@ -78,13 +78,16 @@ trait HasGridFunctions
         }
 
         if (empty($options['to_export'])) {
-            $rows = $builder
+            $builder
                 ->when($limit > 0, function ($builder) use ($limit, $skip) {
                     return $builder->skip($skip)->limit($limit);
-                })
-                ->get();
+                });
+        }
+
+        if (method_exists($this, 'beforeGetRows')) {
+            $rows = $this->beforeGetRows($builder);
         } else {
-            $rows = $builder->cursor();
+            $rows = empty($options['to_export']) ? $builder->get() : $builder->cursor();
         }
 
         if (method_exists($this, 'getTransform')) {
