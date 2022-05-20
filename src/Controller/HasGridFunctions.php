@@ -105,6 +105,17 @@ trait HasGridFunctions
             ];
         }
 
+        if (method_exists($this, 'getExportFields')) {
+            $headers = $this->getExportFields();
+            $rows = $rows->transform(function ($row) use ($headers) {
+                $response = [];
+                foreach ($headers as $k => $v) {
+                    $response[$v] = Arr::get($row, $k , '');
+                }
+                return $response;
+            });
+        }
+
         return $rows;
     }
 
