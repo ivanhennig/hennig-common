@@ -119,9 +119,9 @@ trait HasGridFunctions
         return $rows;
     }
 
-    public function export()
+    public function export($params)
     {
-        $rows = $this->records(Request::all(), ['to_export' => true]);
+        $rows = $this->records($params, ['to_export' => true]);
 
         $export = new CollectionExport($rows);
         $name = 'export' . uniqid() . '.xlsx';
