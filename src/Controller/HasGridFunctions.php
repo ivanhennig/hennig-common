@@ -8,7 +8,6 @@ use Hennig\Common\FTS\MySQLFullTextSearch;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 trait HasGridFunctions
@@ -17,13 +16,15 @@ trait HasGridFunctions
 
     protected $defaultSort = '_id';
 
-    /**
-     * @param $model
-     * @param array $search Additional query
-     * @param string $searchPhrase Quick search input
-     * @return mixed
-     */
-    abstract public function getSearch($model, $search, $searchPhrase);
+    public function export($params)
+    {
+        $rows = $this->records($params, ['to_export' => true]);
+
+        $export = new CollectionExport($rows);
+        $name = 'export' . uniqid() . '.xlsx';
+        Excel::store($export, $name);
+        return "/download/$name";
+    }
 
     /**
      * Common method use by bootgrid
@@ -38,6 +39,7 @@ trait HasGridFunctions
         $page = $params['current'] ?? '' ?: 1;
         $limit = (int)($params['rowCount'] ?? '' ?: 25);
         $sort = $params['sort'] ?? [];
+        $skip_count = !empty($options['to_export']) || !empty($options['skip_count']);
 
         $skip = ($page - 1) * $limit;
         /** @var Builder $builder */
@@ -51,12 +53,13 @@ trait HasGridFunctions
             $builder->search($searchPhrase);
         }
 
-        $count = 0;
-        if (empty($options['to_export'])) {
+        $this->getSearch($builder, $search, $searchPhrase);
+
+        if ($skip_count) {
+            $count = -1;
+        } else {
             $count = $builder->count();
         }
-
-        $this->getSearch($builder, $search, $searchPhrase);
 
         if (empty($sort)) {
             $builder->orderByDesc($this->defaultSort);
@@ -70,11 +73,11 @@ trait HasGridFunctions
                 } else if (in_array($column, array_keys($sortable))) {
                     if (!empty($sortable[$column]) && is_string($sortable[$column])) {
                         $builder->orderByRaw($sortable[$column]);
-                    }  else if (array_key_exists('field', $sortable[$column])) {
-                    $builder->orderBy($sortable[$column]['field'], $direction);
+                    } else if (array_key_exists('field', $sortable[$column])) {
+                        $builder->orderBy($sortable[$column]['field'], $direction);
+                    }
                 }
             }
-        }
         }
 
         if (empty($options['to_export'])) {
@@ -110,7 +113,7 @@ trait HasGridFunctions
             $rows = $rows->transform(function ($row) use ($headers) {
                 $response = [];
                 foreach ($headers as $k => $v) {
-                    $response[$v] = Arr::get($row, $k , '');
+                    $response[$v] = Arr::get($row, $k, '');
                 }
                 return $response;
             });
@@ -119,13 +122,11 @@ trait HasGridFunctions
         return $rows;
     }
 
-    public function export($params)
-    {
-        $rows = $this->records($params, ['to_export' => true]);
-
-        $export = new CollectionExport($rows);
-        $name = 'export' . uniqid() . '.xlsx';
-        Excel::store($export, $name);
-        return "/download/$name";
-    }
+    /**
+     * @param $model
+     * @param array $search Additional query
+     * @param string $searchPhrase Quick search input
+     * @return mixed
+     */
+    abstract public function getSearch($model, $search, $searchPhrase);
 }
