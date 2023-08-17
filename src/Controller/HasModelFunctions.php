@@ -7,17 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 trait HasModelFunctions
 {
     /**
-     * @return Model
-     */
-    abstract public function getModel();
-
-    /**
-     * @param Model $model
-     * @return Model
-     */
-    abstract public function beforeGetData($model);
-    
-    /**
      * Helper called on form load
      *
      * @param string $id
@@ -39,6 +28,17 @@ trait HasModelFunctions
             return $row->toArray();
         }
 
-        return $this->getModel()->newModelInstance();
+        return $this->getModel()->newModelInstance()->toArray();
     }
+
+    /**
+     * @param Model $model
+     * @return Model
+     */
+    abstract public function beforeGetData($model);
+
+    /**
+     * @return Model
+     */
+    abstract public function getModel();
 }
