@@ -2,29 +2,25 @@
 
 namespace Hennig\Builder;
 
-class Form extends Card implements Jsonable
+class Form extends Card implements Jsonable, \JsonSerializable
 {
     use HasEvents;
 
-    public $type = "form";
-    /**
-     *
-     * @var Control[]
-     */
-    public $controls = [];
-    /**
-     *
-     * @var Tab[]
-     */
-    public $tabs = [];
-    /**
-     *
-     * @var Button[]
-     */
-    public $buttons = [];
-    public $title = "";
-    protected $_controls = [];
-    protected $_tabs = [];
+    public string $type = 'form';
+    /** @var Control[] */
+    public array $controls = [];
+    /** @var Tab[] */
+    public array $tabs = [];
+    /** @var Button[] */
+    public array $buttons = [];
+
+    public array $data = [];
+
+    public string $title = "";
+    /** @var array Param for posting data via rpc */
+    public $rpc = [];
+    protected array $_controls = [];
+    protected array $_tabs = [];
     protected $_last_tabref = "tab0";
     /**
      * Whether to include audit tab
@@ -32,11 +28,10 @@ class Form extends Card implements Jsonable
      */
     protected $_audit = true;
 
-    /** @var array Param for posting data via rpc */
-    public $rpc = [];
-
     public function __construct()
     {
+        parent::__construct();
+
         $caller = last(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2));
         $this->rpc = [
             class_basename($caller['class']),
@@ -51,16 +46,6 @@ class Form extends Card implements Jsonable
     public function setAudit($audit)
     {
         $this->_audit = $audit;
-        return $this;
-    }
-
-    /**
-     * @param string $title
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
         return $this;
     }
 
@@ -91,6 +76,11 @@ class Form extends Card implements Jsonable
             }
             $this->_controls[] = $value;
         }
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toJson();
     }
 
     /**
@@ -137,6 +127,12 @@ class Form extends Card implements Jsonable
                 ->setTitle(__('Updated at'))
                 ->setReadonly(true);
         }
+        return $this;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
         return $this;
     }
 }

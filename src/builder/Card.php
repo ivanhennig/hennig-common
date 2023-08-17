@@ -11,7 +11,7 @@ class Card implements ArrayAccess, Jsonable
      * Define o tipo de componente
      * @var string
      */
-    public $type = "";
+    public string $type = "";
 
     public function __construct()
     {
