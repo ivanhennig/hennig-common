@@ -18,12 +18,7 @@ trait HasGridFunctions
 
     public function export($params)
     {
-        $rows = $this->records($params, ['to_export' => true]);
-
-        $export = new CollectionExport($rows);
-        $name = 'export' . uniqid() . '.xlsx';
-        Excel::store($export, $name);
-        return "/download/$name";
+        return $this->records($params, ['to_export' => true]);
     }
 
     /**
@@ -94,7 +89,7 @@ trait HasGridFunctions
         }
 
         if (method_exists($this, 'getTransform')) {
-            $rows = $rows->transform(function ($row) {
+            $rows->map(function ($row) {
                 return $this->getTransform($row);
             });
         }
@@ -108,18 +103,37 @@ trait HasGridFunctions
             ];
         }
 
-        if (method_exists($this, 'getExportFields')) {
-            $headers = $this->getExportFields();
-            $rows = $rows->transform(function ($row) use ($headers) {
-                $response = [];
-                foreach ($headers as $k => $v) {
-                    $response[$v] = Arr::get($row, $k, '');
-                }
-                return $response;
-            });
+        if (empty($rows) || $rows->isEmpty()) {
+            return [];
         }
 
-        return $rows;
+        if (method_exists($this, 'getExportFields')) {
+            $headers = array_keys($this->getExportFields());
+            $headers_labels = array_values($this->getExportFields());
+        } else {
+            $headers = array_keys($rows->first()->toArray());
+            $headers_labels = $headers;
+        }
+
+                $response = [];
+        foreach ($rows as $key => $item) {
+            $response[] = array_map(function ($v) {
+                if (is_object($v) && enum_exists(get_class($v))) {
+                    if (method_exists($v, 'toHuman')) {
+                        return $v->toHuman();
+                    }
+                    return $v->value;
+                }
+                return $v;
+            }, $item->only($headers));
+        }
+        $export = new CollectionExport(
+            $response,
+            $headers_labels
+        );
+        $name = 'export' . uniqid() . '.xlsx';
+        Excel::store($export, $name);
+        return config('app.url') . "/download/$name";
     }
 
     /**

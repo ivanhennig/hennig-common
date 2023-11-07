@@ -2,32 +2,22 @@
 
 namespace Hennig\Common\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class CollectionExport implements FromCollection, WithHeadings
+class CollectionExport implements FromArray, WithHeadings
 {
-    private $collection;
-
     private $headings;
 
-    /**
-     * CollectionExport constructor.
-     *
-     * @param \Illuminate\Support\Collection $collection
-     */
-    public function __construct($collection, $headings = [])
+    public function __construct($rows, $headings = [])
     {
-        $this->collection = $collection;
-        $this->headings = empty($headings) ? collect($collection->first())->keys()->toArray() : $headings;
+        $this->rows = $rows;
+        $this->headings = empty($headings) ? collect($rows->first())->keys()->toArray() : $headings;
     }
 
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    public function array(): array
     {
-        return $this->collection;
+        return $this->rows;
     }
 
     public function headings(): array
