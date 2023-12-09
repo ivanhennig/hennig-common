@@ -115,9 +115,9 @@ trait HasGridFunctions
             $headers_labels = $headers;
         }
 
-                $response = [];
+        $response = [];
         foreach ($rows as $key => $item) {
-            $response[] = array_map(function ($v) {
+            $row = array_map(function ($v) {
                 if (is_object($v) && enum_exists(get_class($v))) {
                     if (method_exists($v, 'toHuman')) {
                         return $v->toHuman();
@@ -125,8 +125,14 @@ trait HasGridFunctions
                     return $v->value;
                 }
                 return $v;
-            }, $item->only($headers));
+            }, Arr::dot($item->toArray()));
+            // Filter out unwanted fields
+            $row = array_intersect_key($row, array_flip($headers));
+            // Sort keys
+            $row = array_replace(array_flip($headers), $row);
+            $response[] = $row;
         }
+
         $export = new CollectionExport(
             $response,
             $headers_labels
