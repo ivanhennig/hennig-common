@@ -56,20 +56,25 @@ trait HasGridFunctions
             $count = $builder->count();
         }
 
+        $sorted = [];
         if (empty($sort)) {
             $builder->orderByDesc($this->defaultSort);
+            $sorted[$this->defaultSort] = 'desc';
         } else {
             $sortable = $builder->getModel()->sortable ?? [];
             foreach ($sort as $column => $direction) {
                 if (in_array($column, $sortable)) {
                     if (is_string($direction)) {
                         $builder->orderBy($column, $direction);
+                        $sorted[$column] = $direction;
                     }
                 } else if (in_array($column, array_keys($sortable))) {
                     if (!empty($sortable[$column]) && is_string($sortable[$column])) {
                         $builder->orderByRaw($sortable[$column]);
+                        $sorted[$column] = 'raw';
                     } else if (array_key_exists('field', $sortable[$column])) {
                         $builder->orderBy($sortable[$column]['field'], $direction);
+                        $sorted[$column] = 'raw';
                     }
                 }
             }
@@ -99,7 +104,8 @@ trait HasGridFunctions
                 'rows' => $rows,
                 'current' => (int)$page,
                 'rowCount' => $limit,
-                'total' => (int)$count
+                'total' => (int)$count,
+                'sort' => $sorted,
             ];
         }
 
