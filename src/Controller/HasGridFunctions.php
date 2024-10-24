@@ -44,8 +44,13 @@ trait HasGridFunctions
         $searchPhrase = $params['searchPhrase'] ?? '';
 
         $uses = class_uses($builder->getModel());
-        if (array_intersect($uses, [MySQLFullTextSearch::class, MongoFTSSearch::class])) {
+        if (array_intersect($uses, [MySQLFullTextSearch::class])) {
             $builder->search($searchPhrase);
+        } else if (array_intersect($uses, [MongoFTSSearch::class])) {
+            $builder
+                ->search($searchPhrase)
+                ->project(['_score' => ['$meta' => 'textScore']])
+                ->orderByRaw(['_score' => ['$meta' => 'textScore']]);
         }
 
         $this->getSearch($builder, $search, $searchPhrase);
