@@ -139,10 +139,13 @@ trait HasGridFunctions
                 }
                 return $v;
             }, Arr::dot($item->toArray()));
+
+            // Fill array values with empty string
+            $array_flip = array_fill_keys(array_keys(array_flip($headers)), '');
             // Filter out unwanted fields
-            $row = array_intersect_key($row, array_flip($headers));
+            $row = array_intersect_key($row, $array_flip);
             // Sort keys
-            $row = array_replace(array_flip($headers), $row);
+            $row = array_replace($array_flip, $row);
             $response[] = $row;
         }
 
