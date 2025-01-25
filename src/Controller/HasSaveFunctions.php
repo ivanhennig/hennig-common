@@ -37,6 +37,10 @@ trait HasSaveFunctions
         $model->fill($params);
         $model->save();
 
+        if (method_exists($this, 'afterSave')) {
+            $this->afterSave($model, $params);
+        }
+
         return [
             'message' => $this->saved_message,
             'data' => $model
