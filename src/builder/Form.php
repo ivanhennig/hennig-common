@@ -103,28 +103,52 @@ class Form extends Card implements Jsonable, \JsonSerializable
                 ->setId('tabAudit')
                 ->setTitle(__('Audit'));
 
-            $this->controls[] = InputText::Instance()
+            $this->controls[] = InputKey::Instance()
                 ->setTabref('tabAudit')
                 ->setName('created_by')
                 ->setTitle(__('Created by'))
+                ->setGridSystem('75')
+                ->setGridBreakAfter()
+                ->setReadonly(true);;
+
+            $this->controls[] = InputText::Instance()
+                ->setTabref('tabAudit')
+                ->setName('created_by_display_text')
+                ->setTitle('Nome')
+                ->setGridSystem('75')
+                ->setGridBreakAfter()
                 ->setReadonly(true);
 
             $this->controls[] = InputDateTime::Instance()
                 ->setTabref('tabAudit')
                 ->setName('created_at')
                 ->setTitle(__('Created at'))
+                ->setGridSystem('75')
+                ->setGridBreakAfter()
                 ->setReadonly(true);
 
-            $this->controls[] = InputText::Instance()
+            $this->controls[] = InputKey::Instance()
                 ->setTabref('tabAudit')
                 ->setName('updated_by')
                 ->setTitle(__('Updated by'))
+                ->setGridSystem('75')
+                ->setGridBreakAfter()
+                ->setReadonly(true);;
+
+            $this->controls[] = InputText::Instance()
+                ->setTabref('tabAudit')
+                ->setName('updated_by_display_text')
+                ->setTitle('Nome')
+                ->setGridSystem('75')
+                ->setGridBreakAfter()
                 ->setReadonly(true);
 
             $this->controls[] = InputDateTime::Instance()
                 ->setTabref('tabAudit')
                 ->setName('updated_at')
                 ->setTitle(__('Updated at'))
+                ->setGridSystem('75')
+                ->setGridBreakAfter()
                 ->setReadonly(true);
         }
         return $this;
