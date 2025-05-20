@@ -10,7 +10,7 @@ namespace Hennig\Builder;
 class InputNumberInteger extends InputNumber
 {
     /** @var string */
-    public $subtype = self::ST_INTEGER;
+    public string $subtype = self::ST_INTEGER;
 
     /** @var int */
     public $decimal = 0;

@@ -2,6 +2,7 @@
 
 namespace Hennig\Common\Controller;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 trait HasLookupFunctions
@@ -13,29 +14,29 @@ trait HasLookupFunctions
      * @param array $filter
      * @return Collection
      */
-    public function lookup($term, $filter = [])
+    public function lookup($term, array $filter = [])
     {
+        /** @var Model $model */
+        $model = $this->getModel();
         if (is_array($term)) {
-            return $this
-                ->getModel()
+            return $model
                 ->where($filter)
                 ->orderBy('name')
                 ->limit(100)
-                ->get(['_id', 'name']);
+                ->get([$model->getKeyName(), 'name']);
         }
 
         $term = trim($term);
-        return $this
-            ->getModel()
+        return $model
             ->when($term, fn ($query) => $query
             ->where(fn ($query) => $query
                 ->where('name', 'like', "%{$term}%")
-                ->orWhere('_id', $term)
+                ->orWhere($model->getKeyName(), $term)
             )
             )
             ->where($filter)
             ->orderBy('name')
             ->limit(100)
-            ->get(['_id', 'name']);
+            ->get([$model->getKeyName(), 'name']);
     }
 }

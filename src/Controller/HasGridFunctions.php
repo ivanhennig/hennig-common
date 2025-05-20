@@ -14,7 +14,7 @@ trait HasGridFunctions
 {
     use HasModelFunctions;
 
-    protected $defaultSort = '_id';
+    protected $defaultSort = '';
 
     public function export($params)
     {
@@ -65,6 +65,8 @@ trait HasGridFunctions
 
         $sorted = [];
         if (empty($sort)) {
+            $this->defaultSort = $this->defaultSort ?: $builder->getModel()->getKeyName();
+
             $builder->orderByDesc($this->defaultSort);
             $sorted[$this->defaultSort] = 'desc';
         } else {

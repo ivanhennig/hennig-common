@@ -11,8 +11,8 @@ namespace Hennig\Builder;
 class InputDate extends InputCommon
 {
     /** @var string */
-    public $type = self::TYP_DATETIME;
+    public string $type = self::TYP_DATETIME;
 
     /** @var string */
-    public $subtype = self::ST_DATE;
+    public string $subtype = self::ST_DATE;
 }

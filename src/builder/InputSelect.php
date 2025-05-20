@@ -14,8 +14,8 @@ class InputSelect extends InputCommon
      *
      * @var string
      */
-    public $type = self::TYP_SELECT;
-    public $subtype = "";
+    public string $type = self::TYP_SELECT;
+    public string $subtype = "";
     public $multiselect = false;
     /**
      * Permite enviar itens na inicialização

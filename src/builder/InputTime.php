@@ -8,5 +8,5 @@ namespace Hennig\Builder;
 class InputTime extends InputDate
 {
     /** @var string */
-    public $subtype = self::ST_TIME;
+    public string $subtype = self::ST_TIME;
 }

@@ -4,5 +4,5 @@ namespace Hennig\Builder;
 
 class InputKey extends InputText
 {
-    public $subtype = 'key';
+    public string $subtype = 'key';
 }

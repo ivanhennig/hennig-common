@@ -12,9 +12,9 @@ namespace Hennig\Builder;
 class InputHidden extends InputCommon
 {
     /** @var string */
-    public $type = self::TYP_TEXT;
+    public string $type = self::TYP_TEXT;
 
     /** @var string */
-    public $subtype = self::ST_HIDDEN;
+    public string $subtype = self::ST_HIDDEN;
 
 }

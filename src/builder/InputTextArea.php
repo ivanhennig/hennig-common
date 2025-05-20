@@ -10,7 +10,7 @@ namespace Hennig\Builder;
 class InputTextArea extends InputCommon
 {
     /** @var string */
-    public $type = self::TYP_TEXTAREA;
+    public string $type = self::TYP_TEXTAREA;
 
     /** @var int */
     public $rows = 3;

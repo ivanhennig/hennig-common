@@ -10,5 +10,5 @@ namespace Hennig\Builder;
 class InputTextEmail extends InputText
 {
     /** @var string */
-    public $subtype = self::ST_EMAIL;
+    public string $subtype = self::ST_EMAIL;
 }

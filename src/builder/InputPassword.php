@@ -10,5 +10,5 @@ namespace Hennig\Builder;
 class InputPassword extends InputText
 {
     /** @var string */
-    public $subtype = self::ST_PASSWORD;
+    public string $subtype = self::ST_PASSWORD;
 }

@@ -12,10 +12,10 @@ namespace Hennig\Builder;
 class VueInstance extends InputCommon
 {
     /** @var string */
-    public $type = 'vue';
+    public string $type = 'vue';
 
     /** @var string Must have the name of globally registered component */
-    public $subtype = '';
+    public string $subtype = '';
 
     /** @var array */
     public $props = [];

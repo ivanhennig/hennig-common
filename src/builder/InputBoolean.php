@@ -10,7 +10,7 @@ namespace Hennig\Builder;
  */
 class InputBoolean extends InputSelect
 {
-    public $subtype = "boolean";
+    public string $subtype = "boolean";
 
     /**
      * @return InputCommon
