@@ -51,7 +51,7 @@ trait HasGridFunctions
                 $builder
                     ->fullTextSearch($searchPhrase)
                     ->project(['score' => ['$meta' => 'textScore']])
-                    ->orderBy(['score' => ['$meta' => 'textScore']]);
+                    ->orderBy('score', ['$meta' => 'textScore']);
             }
         }
 
