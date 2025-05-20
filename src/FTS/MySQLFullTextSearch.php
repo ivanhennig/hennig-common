@@ -4,7 +4,7 @@ namespace Hennig\Common\FTS;
 
 /**
  * Trait MySQLFullTextSearch
- * @method static |$this search(string $term)
+ * @method static |$this fullTextSearch(string $term)
  *
  * @package App\model
  */
@@ -17,7 +17,7 @@ trait MySQLFullTextSearch
      * @param string $term
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSearch($query, $term)
+    public function scopeFullTextSearch($query, $term)
     {
         if (empty($term)) {
             return $query;

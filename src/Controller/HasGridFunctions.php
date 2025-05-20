@@ -46,10 +46,10 @@ trait HasGridFunctions
         if ($searchPhrase) {
             $uses = class_uses($builder->getModel());
             if (array_intersect($uses, [MySQLFullTextSearch::class])) {
-                $builder->search($searchPhrase);
+                $builder->fullTextSearch($searchPhrase);
             } else if (array_intersect($uses, [MongoFTSSearch::class])) {
                 $builder
-                    ->search($searchPhrase)
+                    ->fullTextSearch($searchPhrase)
                     ->project(['_score' => ['$meta' => 'textScore']])
                     ->orderByRaw(['_score' => ['$meta' => 'textScore']]);
             }
