@@ -50,8 +50,8 @@ trait HasGridFunctions
             } else if (array_intersect($uses, [MongoFTSSearch::class])) {
                 $builder
                     ->fullTextSearch($searchPhrase)
-                    ->project(['_score' => ['$meta' => 'textScore']])
-                    ->orderByRaw(['_score' => ['$meta' => 'textScore']]);
+                    ->project(['score' => ['$meta' => 'textScore']])
+                    ->orderBy(['score' => ['$meta' => 'textScore']]);
             }
         }
 
@@ -79,7 +79,7 @@ trait HasGridFunctions
                     }
                 } else if (in_array($column, array_keys($sortable))) {
                     if (!empty($sortable[$column]) && is_string($sortable[$column])) {
-                        $builder->orderByRaw($sortable[$column]);
+                        $builder->orderBy($sortable[$column]);
                         $sorted[$column] = 'raw';
                     } else if (array_key_exists('field', $sortable[$column])) {
                         $builder->orderBy($sortable[$column]['field'], $direction);
