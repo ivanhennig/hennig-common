@@ -16,10 +16,10 @@ trait HasLookupFunctions
      */
     public function lookup($term, array $filter = [])
     {
-        /** @var Model $model */
-        $model = $this->getModel();
+        $builder = $this->getModel();
+        $model = $builder->getModel();
         if (is_array($term)) {
-            return $model
+            return $builder
                 ->where($filter)
                 ->orderBy('name')
                 ->limit(100)
@@ -27,7 +27,7 @@ trait HasLookupFunctions
         }
 
         $term = trim($term);
-        return $model
+        return $builder
             ->when($term, fn ($query) => $query
             ->where(fn ($query) => $query
                 ->where('name', 'like', "%{$term}%")

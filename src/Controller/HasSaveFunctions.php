@@ -19,13 +19,13 @@ trait HasSaveFunctions
      */
     public function save($params)
     {
-        $pk_name = $this->getModel()->getKeyName();
+        $builder = $this->getModel();
+        $pk_name = $builder->getModel()->getKeyName();
 
-        /** @var Model $model */
         if (empty($params[$pk_name])) {
-            $model = $this->getModel()->make();
+            $model = $builder->make();
         } else {
-            $model = $this->getModel()->find($params[$pk_name]);
+            $model = $builder->find($params[$pk_name]);
         }
 
         if (empty($model)) {
